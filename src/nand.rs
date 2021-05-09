@@ -6,8 +6,8 @@ fn nand(a: i8, b: i8) -> i8 {
     }
 }
 
-fn not(in: i8) {
-    if(in == 0) {
+fn not(input: i8) -> i8 {
+    if(input == 0) {
         1
     } else {
         0
@@ -46,10 +46,10 @@ fn mux(a: i8, b:i8, sel: i8) -> i8 {
     }
 }
 
-fn dmux(in: i8, sel: i8) -> (i8,i8) {
+fn dmux(input: i8, sel: i8) -> (i8,i8) {
     if sel == 0 {
-        (in, 0)
+        (input, 0)
     } else {
-        (0,in)
+        (0, input)
     }
 }
