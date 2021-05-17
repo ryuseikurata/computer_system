@@ -11,15 +11,16 @@ fn not(input: bool) -> bool {
 }
 
 fn and(a: bool, b: bool) -> bool {
-    !nand(a, b)
+    not(nand(a,b))
 }
 
 fn or(a: bool, b: bool) -> bool {
-    nand(!a, !b)
+    nand(not(a), not(b))
 }
 
 fn xor(a: bool, b: bool) -> bool {
-    nand(a, b)
+    let temp = nand(a,b);
+    nand(nand(a, temp), nand(b, temp))
 }
 
 fn mux(a: bool, b: bool, sel: bool) -> bool {
@@ -36,6 +37,10 @@ fn dmux(input: bool, sel: bool) -> (bool, bool) {
     } else {
         (false, input)
     }
+}
+
+fn not_16() {
+
 }
 
 #[cfg(test)]
