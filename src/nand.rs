@@ -1,5 +1,7 @@
-// 0: false
-// 1: true
+/// 0: false
+/// 1: true
+/// 基礎の関数
+/// これを使用して他の論理関数を作成する
 pub fn nand(a: bool, b: bool) -> bool {
     !(a && b)
 }
@@ -8,11 +10,11 @@ fn not(input: bool) -> bool {
     nand(input, input)
 }
 
-fn and(a: bool, b:bool)-> bool {
+fn and(a: bool, b: bool) -> bool {
     !nand(a, b)
 }
 
-fn or(a: bool, b:bool) -> bool {
+fn or(a: bool, b: bool) -> bool {
     nand(!a, !b)
 }
 
@@ -20,19 +22,19 @@ fn xor(a: bool, b: bool) -> bool {
     nand(a, b)
 }
 
-fn mux(a: i8, b:i8, sel: i8) -> i8 {
-    if sel == 0 {
+fn mux(a: bool, b: bool, sel: bool) -> bool {
+    if sel == false {
         a
     } else {
         b
     }
 }
 
-fn dmux(input: i8, sel: i8) -> (i8,i8) {
-    if sel == 0 {
-        (input, 0)
+fn dmux(input: bool, sel: bool) -> (bool, bool) {
+    if sel == false {
+        (input, false)
     } else {
-        (0, input)
+        (false, input)
     }
 }
 
@@ -50,7 +52,22 @@ mod tests {
     }
 
     #[test]
+    fn test_not() {
+        assert_eq!(not(false), true);
+    }
+
+    #[test]
     fn test_xor() {
-        assert_eq!(xor(a, b))
+        assert_eq!(xor(true, true), false)
+    }
+
+    #[test]
+    fn test_mux() {
+        assert_eq!(mux(true, false, true), false)
+    }
+
+    #[test]
+    fn test_dmux() {
+        assert_eq!(dmux(true, false), (true, false))
     }
 }
