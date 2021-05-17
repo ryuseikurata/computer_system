@@ -39,31 +39,45 @@ fn dmux(input: bool, sel: bool) -> (bool, bool) {
     }
 }
 
-fn not_16() {
-
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
     #[test]
     fn test_nand() {
         assert_eq!(nand(true, true), false);
+        assert_eq!(nand(true, false), true);
+        assert_eq!(nand(false, true), true);
+        assert_eq!(nand(false, false), true);
     }
 
     #[test]
     fn test_and() {
+        assert_eq!(and(true, true), true);
+        assert_eq!(and(true, false), false);
+        assert_eq!(and(false, true), false);
+        assert_eq!(and(false, false), false);
+    }
+
+    #[test]
+    fn test_or() {
+        assert_eq!(or(true, true), true);
+        assert_eq!(or(true, false), true);
+        assert_eq!(or(false , true), true);
         assert_eq!(or(false, false), false);
     }
 
     #[test]
     fn test_not() {
         assert_eq!(not(false), true);
+        assert_eq!(not(true), false);
     }
 
     #[test]
     fn test_xor() {
-        assert_eq!(xor(true, true), false)
+        assert_eq!(xor(true, true), false);
+        assert_eq!(xor(true, false), true);
+        assert_eq!(xor(false, false), false);
+        assert_eq!(xor(false, true), true);
     }
 
     #[test]
