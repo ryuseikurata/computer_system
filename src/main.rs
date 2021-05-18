@@ -1,5 +1,5 @@
 mod nand;
-mod bool_artithmetic;
+mod adder;
 
 fn main() {
     println!("Hello, world!");
