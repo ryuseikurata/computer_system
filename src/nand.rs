@@ -6,24 +6,24 @@ pub fn nand(a: bool, b: bool) -> bool {
     !(a && b)
 }
 
-fn not(input: bool) -> bool {
+pub fn not(input: bool) -> bool {
     nand(input, input)
 }
 
-fn and(a: bool, b: bool) -> bool {
+pub fn and(a: bool, b: bool) -> bool {
     not(nand(a,b))
 }
 
-fn or(a: bool, b: bool) -> bool {
+pub fn or(a: bool, b: bool) -> bool {
     nand(not(a), not(b))
 }
 
-fn xor(a: bool, b: bool) -> bool {
+pub fn xor(a: bool, b: bool) -> bool {
     let temp = nand(a,b);
     nand(nand(a, temp), nand(b, temp))
 }
 
-fn mux(a: bool, b: bool, sel: bool) -> bool {
+pub fn mux(a: bool, b: bool, sel: bool) -> bool {
     if sel == false {
         a
     } else {
@@ -31,7 +31,7 @@ fn mux(a: bool, b: bool, sel: bool) -> bool {
     }
 }
 
-fn dmux(input: bool, sel: bool) -> (bool, bool) {
+pub fn dmux(input: bool, sel: bool) -> (bool, bool) {
     if sel == false {
         (input, false)
     } else {
