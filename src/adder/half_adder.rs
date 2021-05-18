@@ -1,10 +1,5 @@
 use crate::nand as Nand;
-
-#[derive(PartialEq, Debug)]
-struct AdderResult {
-    pub sum: bool,
-    pub carry: bool,
-}
+use crate::adder::AdderResult;
 
 fn half_adder(a: bool, b: bool) -> AdderResult {
     let sum = Nand::xor(a, b);
