@@ -1,5 +1,5 @@
 
-use crate::adder::AdderResult;
+use crate::adders::AdderResult;
 use crate::gates;
 
 pub struct HalfAdder {

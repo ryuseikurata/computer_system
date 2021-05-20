@@ -1,5 +1,5 @@
 mod gates;
-mod adder;
+mod adders;
 
 fn main() {
     println!("Hello, world!");
