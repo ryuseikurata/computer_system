@@ -1,4 +1,4 @@
-mod nand;
+mod gates;
 mod adder;
 
 fn main() {

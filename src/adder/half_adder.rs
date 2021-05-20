@@ -1,10 +1,22 @@
-use crate::nand as Nand;
-use crate::adder::AdderResult;
 
-fn half_adder(a: bool, b: bool) -> AdderResult {
-    let sum = Nand::xor(a, b);
-    let carry = Nand::and(a, b);
-    return AdderResult { sum, carry };
+use crate::adder::AdderResult;
+use crate::gates;
+
+pub struct HalfAdder {
+    a: bool,
+    b: bool,
+}
+
+impl HalfAdder {
+    fn new(a: bool, b: bool) -> HalfAdder {
+       HalfAdder { a, b }
+    }
+
+    fn calc(&self) -> AdderResult {
+      let sum = gates::xor::calc(self.a, self.b);
+      let carry = gates::and::calc(self.a, self.b);
+      AdderResult {sum, carry}
+    }
 }
 
 #[cfg(test)]
@@ -14,7 +26,7 @@ mod tests {
     #[test]
     fn test_half_adder() {
         assert_eq!(
-            half_adder(false, false),
+          HalfAdder::new(false, false).calc(),
             AdderResult {
                 sum: false,
                 carry: false
@@ -22,7 +34,7 @@ mod tests {
         );
 
         assert_eq!(
-            half_adder(false, true),
+          HalfAdder::new(false, true).calc(),
             AdderResult {
                 sum: true,
                 carry: false
@@ -30,7 +42,7 @@ mod tests {
         );
 
         assert_eq!(
-            half_adder(true, false),
+          HalfAdder::new(true, false).calc(),
             AdderResult {
                 sum: true,
                 carry: false
@@ -38,7 +50,7 @@ mod tests {
         );
 
         assert_eq!(
-            half_adder(true, true),
+          HalfAdder::new(true, true).calc(),
             AdderResult {
                 sum: false,
                 carry: true
