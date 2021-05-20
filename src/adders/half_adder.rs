@@ -1,4 +1,3 @@
-
 use crate::adders::AdderResult;
 use crate::gates;
 
@@ -8,14 +7,10 @@ pub struct HalfAdder {
 }
 
 impl HalfAdder {
-    fn new(a: bool, b: bool) -> HalfAdder {
-       HalfAdder { a, b }
-    }
-
-    fn calc(&self) -> AdderResult {
-      let sum = gates::xor::calc(self.a, self.b);
-      let carry = gates::and::calc(self.a, self.b);
-      AdderResult {sum, carry}
+    pub fn calc(a: bool, b: bool) -> AdderResult {
+        let sum = gates::xor::calc(a, b);
+        let carry = gates::and::calc(a, b);
+        AdderResult { sum, carry }
     }
 }
 
@@ -26,34 +21,34 @@ mod tests {
     #[test]
     fn test_half_adder() {
         assert_eq!(
-          HalfAdder::new(false, false).calc(),
+            HalfAdder::calc(false, false),
             AdderResult {
+                carry: false,
                 sum: false,
-                carry: false
             }
         );
 
         assert_eq!(
-          HalfAdder::new(false, true).calc(),
+            HalfAdder::calc(false, true),
             AdderResult {
+                carry: false,
                 sum: true,
-                carry: false
             }
         );
 
         assert_eq!(
-          HalfAdder::new(true, false).calc(),
+            HalfAdder::calc(true, false),
             AdderResult {
+                carry: false,
                 sum: true,
-                carry: false
             }
         );
 
         assert_eq!(
-          HalfAdder::new(true, true).calc(),
+            HalfAdder::calc(true, true),
             AdderResult {
+                carry: true,
                 sum: false,
-                carry: true
             }
         );
     }

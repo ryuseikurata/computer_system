@@ -1,6 +1,6 @@
 use crate::gates;
 pub fn calc(a: bool, b: bool) -> bool {
-    gates::nand::calc(gates::not::calc(a), gates::not::calc(b))
+    !gates::nand::calc(a, b)
 }
 
 #[cfg(test)]
