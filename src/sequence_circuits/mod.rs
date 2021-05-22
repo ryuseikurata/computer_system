@@ -1,4 +1,4 @@
-pub mod dff;
-pub mod register;
-pub mod memory;
 pub mod counter_circuit;
+pub mod flip_flop;
+pub mod memory;
+pub mod register;
