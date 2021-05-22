@@ -1,4 +1,4 @@
-use crate::gates::mux8way16;
+use crate::gates::{dmux8way, mux8way16};
 
 use super::register::{Register, Word};
 
@@ -28,7 +28,15 @@ impl RAM8 {
         )
     }
 
-    pub fn clock(&mut self, address: [bool; 3], input: Word, load: bool) -> Word {
-        [true; 16]
+    pub fn clock(&mut self, address: [bool; 3], input: Word, load: bool) {
+        let load = dmux8way::calc(load, address);
+        self.registers[0].clock(input, load[0]);
+        self.registers[1].clock(input, load[1]);
+        self.registers[2].clock(input, load[2]);
+        self.registers[3].clock(input, load[3]);
+        self.registers[4].clock(input, load[4]);
+        self.registers[5].clock(input, load[5]);
+        self.registers[6].clock(input, load[6]);
+        self.registers[7].clock(input, load[7]);
     }
 }
