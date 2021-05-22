@@ -12,9 +12,12 @@ mod tests {
 
     #[test]
     fn test_dmux() {
-        assert_eq!(calc(true, false), [true, false]);
-        assert_eq!(calc(true, true), [false, true]);
-        assert_eq!(calc(false, false), [false, false]);
-        assert_eq!(calc(false, true), [false, false]);
+        let input1 = true;
+        assert_eq!(calc(input1, false), [input1, false]);
+        assert_eq!(calc(input1, true), [false, input1]);
+
+        let input2 = false;
+        assert_eq!(calc(input2, false), [input2, false]);
+        assert_eq!(calc(input2, true), [false, input2]);
     }
 }
