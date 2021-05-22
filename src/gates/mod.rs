@@ -5,4 +5,5 @@ pub mod or;
 pub mod xor;
 pub mod mux;
 pub mod dmux;
-
+pub mod mux16;
+pub mod mux4way16;
