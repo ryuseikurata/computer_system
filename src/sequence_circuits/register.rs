@@ -1,6 +1,7 @@
 use super::bit_register::BitRegister;
 
 pub type Word = [bool; 16];
+#[derive(Clone, Copy)]
 pub struct Register {
     bits: [BitRegister; 16],
 }
