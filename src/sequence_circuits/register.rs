@@ -1,7 +1,6 @@
 use super::bit_register::BitRegister;
 
 pub type Word = [bool; 16];
-#[derive(Clone, Copy)]
 pub struct Register {
     bits: [BitRegister; 16],
 }
@@ -9,7 +8,24 @@ pub struct Register {
 impl Register {
     pub fn new() -> Self {
         Self {
-            bits: [BitRegister::new(); 16],
+            bits: [
+                BitRegister::new(),
+                BitRegister::new(),
+                BitRegister::new(),
+                BitRegister::new(),
+                BitRegister::new(),
+                BitRegister::new(),
+                BitRegister::new(),
+                BitRegister::new(),
+                BitRegister::new(),
+                BitRegister::new(),
+                BitRegister::new(),
+                BitRegister::new(),
+                BitRegister::new(),
+                BitRegister::new(),
+                BitRegister::new(),
+                BitRegister::new(),
+            ],
         }
     }
     /// 個別に初期化する実装が良さそうなのがない
@@ -36,8 +52,8 @@ impl Register {
     }
 
     pub fn clock(&mut self, input: Word, load: bool) {
-      for (i, &x) in input.iter().enumerate() {
-        self.bits[i].clock(x, load)
-      }
+        for (i, &x) in input.iter().enumerate() {
+            self.bits[i].clock(x, load)
+        }
     }
 }
