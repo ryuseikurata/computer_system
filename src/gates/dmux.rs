@@ -1,17 +1,20 @@
+use super::{and, not};
+
 pub fn calc(input: bool, sel: bool) -> (bool, bool) {
-  if sel == false {
-    (input, false)
-  } else {
-    (false, input)
-  }
+    let a = and::calc(input, not::calc(sel));
+    let b = and::calc(input, sel);
+    (a, b)
 }
 
 #[cfg(test)]
 mod tests {
-  use super::*;
+    use super::*;
 
-  #[test]
-  fn test_dmux()  {
-    assert_eq!(calc(true, false), (true, false))
-  }
+    #[test]
+    fn test_dmux() {
+        assert_eq!(calc(true, false), (true, false));
+        assert_eq!(calc(true, true), (false, true));
+        assert_eq!(calc(false, false), (false, false));
+        assert_eq!(calc(false, true), (false, false));
+    }
 }
