@@ -34,4 +34,10 @@ impl Register {
             self.bits[15].out(),
         ]
     }
+
+    pub fn clock(&mut self, input: Word, load: bool) {
+      for (i, &x) in input.iter().enumerate() {
+        self.bits[i].clock(x, load)
+      }
+    }
 }
