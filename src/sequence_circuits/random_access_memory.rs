@@ -18,5 +18,7 @@ impl RAM8 {
       mux8way16::calc(self.registers[0].out(), self.registers[1].out(), self.registers[2].out(), self.registers[3].out(), self.registers[4].out(), self.registers[5].out(), self.registers[6].out(), self.registers[7].out(), address)
     }
 
-    pub fn clock() {}
+    pub fn clock(&mut self, address: [bool; 3], input: Word, load: bool) -> Word {
+      
+    }
 }
