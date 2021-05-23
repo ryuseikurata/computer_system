@@ -1,4 +1,4 @@
-use crate::gates::{dmux8way, mux4way16, mux8way16};
+use crate::gates::{dmux4way, dmux8way, mux4way16, mux8way16};
 
 use super::register::{Register, Word};
 
@@ -85,6 +85,20 @@ impl RAM64 {
             hi,
         )
     }
+
+    pub fn clock(&mut self, address: [bool; 6], input: Word, load: bool) {
+        let lo = [address[0], address[1], address[2]];
+        let hi = [address[3], address[4], address[5]];
+        let load = dmux8way::calc(load, hi);
+        self.rams[0].clock(lo, input, load[0]);
+        self.rams[1].clock(lo, input, load[1]);
+        self.rams[2].clock(lo, input, load[2]);
+        self.rams[3].clock(lo, input, load[3]);
+        self.rams[4].clock(lo, input, load[4]);
+        self.rams[5].clock(lo, input, load[5]);
+        self.rams[6].clock(lo, input, load[6]);
+        self.rams[7].clock(lo, input, load[7]);
+    }
 }
 
 pub struct RAM512 {
@@ -123,6 +137,22 @@ impl RAM512 {
             self.rams[7].out(lo),
             hi,
         )
+    }
+
+    pub fn clock(&mut self, address: [bool; 9], input: Word, load: bool) {
+        let lo = [
+            address[0], address[1], address[2], address[3], address[4], address[5],
+        ];
+        let hi = [address[6], address[7], address[8]];
+        let load = dmux8way::calc(load, hi);
+        self.rams[0].clock(lo, input, load[0]);
+        self.rams[1].clock(lo, input, load[1]);
+        self.rams[2].clock(lo, input, load[2]);
+        self.rams[3].clock(lo, input, load[3]);
+        self.rams[4].clock(lo, input, load[4]);
+        self.rams[5].clock(lo, input, load[5]);
+        self.rams[6].clock(lo, input, load[6]);
+        self.rams[7].clock(lo, input, load[7]);
     }
 }
 
@@ -166,6 +196,26 @@ impl RAM4K {
             hi,
         )
     }
+
+    pub fn clock(&mut self, address: [bool; 12], input: Word, load: bool) {
+        let lo = [
+            address[0], address[1], address[2], address[3], address[4], address[5], address[6],
+            address[7], address[8],
+        ];
+
+        let hi = [address[9], address[10], address[11]];
+
+        let load = dmux8way::calc(load, hi);
+
+        self.rams[0].clock(lo, input, load[0]);
+        self.rams[1].clock(lo, input, load[1]);
+        self.rams[2].clock(lo, input, load[2]);
+        self.rams[3].clock(lo, input, load[3]);
+        self.rams[4].clock(lo, input, load[4]);
+        self.rams[5].clock(lo, input, load[5]);
+        self.rams[6].clock(lo, input, load[6]);
+        self.rams[7].clock(lo, input, load[7]);
+    }
 }
 
 pub struct RAM16K {
@@ -203,5 +253,30 @@ impl RAM16K {
             self.rams[3].out(lo),
             hi,
         )
+    }
+
+    pub fn clock(&mut self, address: [bool; 14], input: Word, load: bool) {
+        let lo = [
+            address[0],
+            address[1],
+            address[2],
+            address[3],
+            address[4],
+            address[5],
+            address[6],
+            address[7],
+            address[8],
+            address[9],
+            address[10],
+            address[11],
+        ];
+        let hi = [address[12], address[13]];
+
+        let load = dmux4way::calc(load, hi);
+
+        self.rams[0].clock(lo, input, load[0]);
+        self.rams[1].clock(lo, input, load[1]);
+        self.rams[2].clock(lo, input, load[2]);
+        self.rams[3].clock(lo, input, load[3]);
     }
 }
