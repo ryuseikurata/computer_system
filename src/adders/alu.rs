@@ -1,6 +1,6 @@
 use crate::{
     const_values,
-    gates::{and16, mux, mux16, not, not16, or, or8way},
+    gates::{and16, mux16, not, not16, or, or8way},
     sequence_circuits::register::Word,
 };
 
@@ -31,7 +31,7 @@ pub fn calc(
 
     let no_result = mux16::calc(f_result, not16::calc(f_result), no);
 
-    let zr = equalZero(no_result);
+    let zr = equal_zero(no_result);
 
     let ng = no_result[15];
     (no_result, zr, ng)
@@ -46,7 +46,7 @@ fn add_or_and(a: Word, b: Word, f: bool) -> Word {
     mux16::calc(and16::calc(a, b), adder16::calc(a, b), f)
 }
 
-fn equalZero(input: Word) -> bool {
+fn equal_zero(input: Word) -> bool {
     let c = or::calc(
         or8way::calc([
             input[0], input[1], input[2], input[3], input[4], input[5], input[6], input[7],
