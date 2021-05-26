@@ -6,7 +6,7 @@ pub struct FullAdder {
 }
 
 impl FullAdder {
-    fn calc(a: bool, b: bool, c: bool) -> AdderResult {
+    pub fn calc(a: bool, b: bool, c: bool) -> AdderResult {
         let half_adder_result_1 = half_adder::HalfAdder::calc(a, b);
 
         let half_adder_result_2 = half_adder::HalfAdder::calc(half_adder_result_1.sum, c);
