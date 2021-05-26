@@ -52,14 +52,8 @@ pub mod tests {
 
     #[test]
     fn test() {
-        let x = [
-            true, false, true, false, true, false, true, false, true, false, true, false, true,
-            false, true, false,
-        ];
-        let y = [
-            false, true, false, true, false, true, true, false, true, false, true, false, true,
-            false, true, false,
-        ];
+        let x = const_values::SAMPLE_1;
+        let y = const_values::SAMPLE_2;
 
         assert_eq!(
             calc(x, y, true, false, true, false, true, false),
