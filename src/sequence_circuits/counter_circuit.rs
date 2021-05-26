@@ -1,7 +1,5 @@
-use crate::{
-    adders::incrementer16,
-    gates::{mux16, mux4way16},
-};
+use crate::adders::incrementer16;
+use crate::gates::{mux16, mux4way16};
 
 use super::register::{Register, Word};
 

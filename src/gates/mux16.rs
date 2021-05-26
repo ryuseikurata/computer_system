@@ -2,6 +2,8 @@ use crate::sequence_circuits::register::Word;
 
 use super::mux;
 
+/// trueだったら右側\
+/// falseだったら左側
 pub fn calc(a: Word, b: Word, sel: bool) -> Word {
     [
         mux::calc(a[0], b[0], sel),

@@ -1,5 +1,5 @@
 use crate::{
-    adders::{full_adder, half_adder, AdderResult},
+    adders::{full_adder, half_adder},
     sequence_circuits::register::Word,
 };
 
