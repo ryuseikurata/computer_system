@@ -10,12 +10,12 @@ pub const FULL: Word = [true; 16];
 
 pub const SAMPLE_1: Word = [
     true, false, true, false, true, true, false, true, false, true, false, true, false, true,
-    false, true,
+    false, false,
 ];
 
 pub const SAMPLE_2: Word = [
     false, true, false, true, false, true, false, true, false, true, false, true, false, true,
-    false, true,
+    false, false,
 ];
 
 pub const SAMPLE_3: Word = [

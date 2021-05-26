@@ -1,6 +1,6 @@
 use crate::{
     const_values,
-    gates::{and16, mux16, not, not16, or, or8way},
+    gates::{and16, mux, mux16, not, not16, or, or8way},
     sequence_circuits::register::Word,
 };
 
@@ -13,7 +13,16 @@ use super::adder16;
 /// f 関数コード: trueは加算、falseはAnd演算\
 /// no 出力(out)を反転(negate)
 
-pub fn calc(x: Word, y: Word, zx: bool, nx: bool, zy: bool, ny: bool, f: bool, no: bool) -> Word {
+pub fn calc(
+    x: Word,
+    y: Word,
+    zx: bool,
+    nx: bool,
+    zy: bool,
+    ny: bool,
+    f: bool,
+    no: bool,
+) -> (Word, bool, bool) {
     let x = zero_or_negate(x, zx, nx);
 
     let y = zero_or_negate(y, zy, ny);
@@ -23,8 +32,9 @@ pub fn calc(x: Word, y: Word, zx: bool, nx: bool, zy: bool, ny: bool, f: bool, n
     let no_result = mux16::calc(f_result, not16::calc(f_result), no);
 
     let zr = equalZero(no_result);
-    let ng = no_result[0];
-    no_result
+
+    let ng = no_result[15];
+    (no_result, zr, ng)
 }
 
 fn zero_or_negate(input: Word, z: bool, n: bool) -> Word {
@@ -58,24 +68,35 @@ pub mod tests {
 
         assert_eq!(
             calc(x, y, true, false, true, false, true, false),
-            const_values::ZERO
+            (const_values::ZERO, true, false)
         );
         assert_eq!(
             calc(x, y, true, true, true, true, true, true),
-            const_values::ONE
+            (const_values::ONE, false, false)
         );
         assert_eq!(
             calc(x, y, true, true, true, false, true, false),
-            const_values::FULL
+            (const_values::FULL, false, true)
         );
-        assert_eq!(calc(x, y, false, false, true, true, false, false), x);
+        assert_eq!(
+            calc(x, y, false, false, true, true, false, false),
+            (x, false, false)
+        );
 
         assert_eq!(
             calc(x, y, false, false, true, true, false, true),
-            not16::calc(x)
+            (not16::calc(x), false, true)
         );
 
-        assert_eq!(calc(x, y, true, true, false, false, false, false), y);
+        assert_eq!(
+            calc(x, y, true, true, false, false, false, false),
+            (y, false, false)
+        );
+
+        assert_eq!(
+            calc(x, y, true, true, false, false, false, true),
+            (not16::calc(y), false, true)
+        )
     }
 
     #[test]
