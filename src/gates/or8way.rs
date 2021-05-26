@@ -2,7 +2,7 @@ use crate::sequence_circuits::register::Word;
 
 use super::or;
 
-pub fn calc(input: Word) -> bool {
+pub fn calc(input: [bool; 8]) -> bool {
     let w0 = or::calc(input[0], input[1]);
     let w1 = or::calc(input[2], input[3]);
     let w2 = or::calc(input[4], input[5]);

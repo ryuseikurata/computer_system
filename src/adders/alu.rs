@@ -1,6 +1,6 @@
 use crate::{
     const_values,
-    gates::{and16, mux16, not16},
+    gates::{and16, mux16, not, not16, or, or8way},
     sequence_circuits::register::Word,
 };
 
@@ -22,7 +22,7 @@ pub fn calc(x: Word, y: Word, zx: bool, nx: bool, zy: bool, ny: bool, f: bool, n
 
     let no_result = mux16::calc(f_result, not16::calc(f_result), no);
 
-    let zr =  if no_result == const_values::ZERO { true } else { false };
+    let zr = equalZero(no_result);
     let ng = no_result[0];
     no_result
 }
@@ -34,6 +34,18 @@ fn zero_or_negate(input: Word, z: bool, n: bool) -> Word {
 
 fn add_or_and(a: Word, b: Word, f: bool) -> Word {
     mux16::calc(and16::calc(a, b), adder16::calc(a, b), f)
+}
+
+fn equalZero(input: Word) -> bool {
+    let c = or::calc(
+        or8way::calc([
+            input[0], input[1], input[2], input[3], input[4], input[5], input[6], input[7],
+        ]),
+        or8way::calc([
+            input[8], input[9], input[10], input[11], input[12], input[13], input[14], input[15],
+        ]),
+    );
+    not::calc(c)
 }
 #[cfg(test)]
 pub mod tests {
