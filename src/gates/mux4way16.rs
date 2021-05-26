@@ -8,9 +8,25 @@ pub fn calc(a: Word, b: Word, c: Word, d: Word, sel: [bool; 2]) -> Word {
 
 #[cfg(test)]
 mod tests {
-  use super::*;
+    use crate::const_values;
 
-  #[test]
-  fn test(){
-  }
+    use super::*;
+
+    #[test]
+    fn test() {
+        let a = [
+            true, false, true, false, true, true, false, true, false, true, false, true, false,
+            true, false, true,
+        ];
+        let b = [
+            false, true, false, true, false, true, false, true, false, true, false, true, false,
+            true, false, true,
+        ];
+        let c = const_values::FULL;
+        let d = const_values::ZERO;
+        assert_eq!(calc(a, b, c, d, [false, false]), a);
+        assert_eq!(calc(a, b, c, d, [true, false]), b);
+        assert_eq!(calc(a, b, c, d, [false, true]), c);
+        assert_eq!(calc(a, b, c, d, [true, true]), d);
+    }
 }
