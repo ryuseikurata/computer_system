@@ -1,6 +1,6 @@
 use crate::{
     const_values,
-    gates::{and16, mux16, mux4way16, not16},
+    gates::{and16, mux16, not16},
     sequence_circuits::register::Word,
 };
 
