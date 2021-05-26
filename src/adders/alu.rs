@@ -14,28 +14,13 @@ use super::adder16;
 /// no 出力(out)を反転(negate)
 
 pub fn calc(x: Word, y: Word, zx: bool, nx: bool, zy: bool, ny: bool, f: bool, no: bool) -> Word {
-    let x = mux4way16::calc(
-        x,
-        not16::calc(x),
-        const_values::ZERO,
-        const_values::FULL,
-        [zx, nx],
-    );
-    let y = mux4way16::calc(
-        y,
-        not16::calc(y),
-        const_values::ZERO,
-        const_values::FULL,
-        [zy, ny],
-    );
-    let result = mux4way16::calc(
-        and16::calc(x, y),
-        adder16::calc(x, y),
-        not16::calc(and16::calc(x, y)),
-        not16::calc(adder16::calc(x, y)),
-        [no, f],
-    );
-    result
+    let x = zero_or_negate(x, zx, nx);
+    let y = zero_or_negate(y, zy, ny);
+
+    let f_result = add_or_and(x, y, f);
+
+    let o_result = mux16::calc(f_result, not16::calc(f_result), no);
+    o_result
 }
 
 fn zero_or_negate(input: Word, z: bool, n: bool) -> Word {
@@ -68,9 +53,26 @@ pub mod tests {
             const_values::FULL
         );
         assert_eq!(calc(x, y, false, false, true, true, false, false), x);
+
         assert_eq!(
             calc(x, y, false, false, true, true, false, true),
             not16::calc(x)
         );
+
+        assert_eq!(calc(x, y, true, true, false, false, false, false), y);
     }
 }
+
+/*
+let cy = y
+        .iter()
+        .map(|i| i.to_string())
+        .collect::<Vec<String>>()
+        .concat();
+    let c = f_result
+        .iter()
+        .map(|i| i.to_string())
+        .collect::<Vec<String>>()
+        .concat();
+    println!("{}", c);
+*/
