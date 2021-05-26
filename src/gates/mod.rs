@@ -11,4 +11,5 @@ pub mod nand;
 pub mod not;
 pub mod not16;
 pub mod or;
+pub mod or8way;
 pub mod xor;

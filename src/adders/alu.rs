@@ -15,12 +15,16 @@ use super::adder16;
 
 pub fn calc(x: Word, y: Word, zx: bool, nx: bool, zy: bool, ny: bool, f: bool, no: bool) -> Word {
     let x = zero_or_negate(x, zx, nx);
+
     let y = zero_or_negate(y, zy, ny);
 
     let f_result = add_or_and(x, y, f);
 
-    let o_result = mux16::calc(f_result, not16::calc(f_result), no);
-    o_result
+    let no_result = mux16::calc(f_result, not16::calc(f_result), no);
+
+    let zr =  if no_result == const_values::ZERO { true } else { false };
+    let ng = no_result[0];
+    no_result
 }
 
 fn zero_or_negate(input: Word, z: bool, n: bool) -> Word {
@@ -36,7 +40,7 @@ pub mod tests {
     use super::*;
 
     #[test]
-    fn test() {
+    fn test_main() {
         let x = const_values::SAMPLE_1;
         let y = const_values::SAMPLE_2;
 
@@ -60,6 +64,13 @@ pub mod tests {
         );
 
         assert_eq!(calc(x, y, true, true, false, false, false, false), y);
+    }
+
+    #[test]
+    fn test_add_or_and() {
+        let x = const_values::FULL;
+        let y = const_values::SAMPLE_2;
+        assert_eq!(add_or_and(x, y, false), y)
     }
 }
 
