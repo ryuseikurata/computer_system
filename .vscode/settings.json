@@ -4,6 +4,7 @@
     "editor.detectIndentation": false,
     "editor.renderControlCharacters": true,
     "editor.formatOnSave": true,
+    "files.autoSave": "afterDelay",
     "editor.wordWrap": "on",
     "git.ignoreLimitWarning": true,
     "git.autofetch": true,

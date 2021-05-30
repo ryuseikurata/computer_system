@@ -1,6 +1,6 @@
 use crate::gates::{dmux4way, dmux8way, mux4way16, mux8way16};
 
-use super::register::{Register, Word};
+use super::{register::Register, word::Word};
 
 pub struct RAM8 {
     registers: [Register; 8],

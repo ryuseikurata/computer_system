@@ -1,4 +1,4 @@
-use super::{dmux, not};
+use super::dmux;
 
 pub fn calc(input: bool, sel: [bool; 2]) -> [bool; 4] {
     let [ab, cd] = dmux::calc(input, sel[1]);

@@ -1,5 +1,6 @@
+use crate::sequence_circuits::word::Word;
+
 use super::adder16;
-use crate::sequence_circuits::register::Word;
 
 pub fn calc(input: Word) -> Word {
     adder16::calc(

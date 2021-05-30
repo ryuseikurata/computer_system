@@ -1,4 +1,4 @@
-use crate::sequence_circuits::register::Word;
+use crate::sequence_circuits::word::Word;
 
 use super::mux;
 

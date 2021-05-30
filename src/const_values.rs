@@ -1,4 +1,6 @@
-use crate::sequence_circuits::register::Word;
+use crate::sequence_circuits::word::Word;
+
+
 
 pub const ZERO: Word = [false; 16];
 

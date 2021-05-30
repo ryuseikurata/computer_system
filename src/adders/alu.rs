@@ -1,8 +1,4 @@
-use crate::{
-    const_values,
-    gates::{and16, mux16, not, not16, or, or8way},
-    sequence_circuits::register::Word,
-};
+use crate::{const_values, gates::{and16, mux16, not, not16, or, or8way}, sequence_circuits::word::Word};
 
 use super::adder16;
 /// x[16], y[16], 二つの16ビットデータ入力\

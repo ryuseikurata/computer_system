@@ -1,7 +1,7 @@
 use crate::adders::incrementer16;
 use crate::gates::{mux16, mux4way16};
 
-use super::register::{Register, Word};
+use super::{register::Register, word::Word};
 
 pub struct Counter {
     register: Register,

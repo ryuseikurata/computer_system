@@ -1,7 +1,8 @@
 mod adders;
+mod computer_components;
+mod const_values;
 mod gates;
 mod sequence_circuits;
-mod const_values;
 
 fn main() {
     println!("Hello, world!");

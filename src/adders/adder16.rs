@@ -1,6 +1,6 @@
 use crate::{
     adders::{full_adder, half_adder},
-    sequence_circuits::register::Word,
+    sequence_circuits::word::Word,
 };
 
 pub fn calc(a: Word, b: Word) -> Word {

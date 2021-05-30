@@ -1,5 +1,3 @@
-use crate::sequence_circuits::register::Word;
-
 use super::or;
 
 pub fn calc(input: [bool; 8]) -> bool {

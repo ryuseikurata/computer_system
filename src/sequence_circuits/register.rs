@@ -1,6 +1,5 @@
-use super::bit_register::BitRegister;
+use super::{bit_register::BitRegister, word::Word};
 
-pub type Word = [bool; 16];
 pub struct Register {
     bits: [BitRegister; 16],
 }
