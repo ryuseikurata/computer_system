@@ -2,8 +2,8 @@ use super::{counter_circuit::Counter, register::Register, word::Word};
 
 pub struct CPU {
     a_register: Register,
-    b_register: Register,
-    outM: Word,
+    d_register: Register,
+    out_memory: Word,
     write_dist: Word,
     pc: Counter,
 }
@@ -12,13 +12,16 @@ impl CPU {
     pub fn new() -> Self {
         CPU {
             a_register: Register::new(),
-            b_register: Register::new(),
-            outM: [false; 16],
+            d_register: Register::new(),
+            out_memory: [false; 16],
             write_dist: [false; 16],
             pc: Counter::new(),
         }
     }
 
+    pub fn cycle(&mut self, in_memory: Word, instruction: Word, reset: bool ) {
+      let is_c_command = instruction[15]; // A命令かC命令か
+    }
     /// 出力 (i xx a cccccc ddd jjj) \
     /// i: 命令の種類 false=>A命令, true=>C命令 \
     /// C命令の場合、以下のように読み取られる。A命令の場合、定数値として解釈される。\
