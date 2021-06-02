@@ -6,3 +6,4 @@ pub mod bit_register;
 pub mod register;
 pub mod clock;
 pub mod word;
+pub mod cpu;
