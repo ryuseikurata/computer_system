@@ -19,6 +19,12 @@ impl CPU {
         }
     }
 
+    /// 出力 (i xx a cccccc ddd jjj) \
+    /// i: 命令の種類 false=>A命令, true=>C命令 \
+    /// C命令の場合、以下のように読み取られる。A命令の場合、定数値として解釈される。\
+    /// a,c => comp領域 \
+    /// d => dest領域 \
+    /// j => jump領域
     pub fn decode(instruction: Word) -> (bool, [bool; 2], bool, [bool; 6], [bool; 3], [bool; 3]) {
         (
             instruction[0],
