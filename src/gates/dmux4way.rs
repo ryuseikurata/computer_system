@@ -1,5 +1,7 @@
 use super::dmux;
 
+/// 一つがinputの値が入り、他はfalseが入るようになる関数\
+/// テストコードで仕様を確認
 pub fn calc(input: bool, sel: [bool; 2]) -> [bool; 4] {
     let [ab, cd] = dmux::calc(input, sel[1]);
     let [a, b] = dmux::calc(ab, sel[0]);
