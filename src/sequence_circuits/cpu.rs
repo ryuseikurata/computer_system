@@ -1,6 +1,6 @@
 use crate::{
     adders::alu,
-    gates::{and, mux, mux16, not, or},
+    gates::{and, mux16, not, or},
 };
 
 use super::{counter_circuit::Counter, register::Register, word::Word};
@@ -165,6 +165,15 @@ impl CPU {
             ],
             [instruction[10], instruction[11], instruction[12]],
             [instruction[13], instruction[14], instruction[15]],
+        )
+    }
+
+    pub fn out(&self) -> (Word, bool, [bool; 15], Counter) {
+        (
+            self.out_memory,
+            self.write_to_memory,
+            self.address_memory,
+            self.pc,
         )
     }
 }

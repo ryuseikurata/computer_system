@@ -1,5 +1,5 @@
 use super::{bit_register::BitRegister, word::Word};
-
+#[derive(Copy, Clone)]
 pub struct Register {
     bits: [BitRegister; 16],
 }

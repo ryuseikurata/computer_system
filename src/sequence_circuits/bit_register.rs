@@ -1,5 +1,6 @@
 use super::flip_flop::FlipFlop;
 use crate::gates::mux;
+#[derive(Copy, Clone)]
 pub struct BitRegister {
     flipflop: FlipFlop,
 }

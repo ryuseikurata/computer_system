@@ -2,7 +2,7 @@ use crate::adders::incrementer16;
 use crate::gates::{mux16, mux4way16};
 
 use super::{register::Register, word::Word};
-
+#[derive(Copy, Clone)]
 pub struct Counter {
     register: Register,
 }

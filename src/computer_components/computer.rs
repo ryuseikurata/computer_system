@@ -9,11 +9,11 @@ pub struct Computer<S: Screen, K: Keyboard> {
 }
 
 impl<S: Screen, K: Keyboard> Computer<S, K> {
-  pub fn new() -> Self {
-    Self {
-      rom: ROM32K::new(),
-      cpu: CPU::new(),
-      memory: Memory:
+    pub fn new() -> Self {
+        Self {
+            rom: ROM32K::new(),
+            cpu: CPU::new(),
+            memory: Memory::new(),
+        }
     }
-  }
 }
