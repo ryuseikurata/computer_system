@@ -54,7 +54,6 @@ impl<S: Screen, K: Keyboard> Memory<S, K> {
                 address[13],
             ],
             input,
-            // TODO: 謎
             is_load_ram,
         );
     }

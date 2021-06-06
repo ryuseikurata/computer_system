@@ -17,7 +17,7 @@ impl Computer {
     }
 
     pub  fn clock(&mut self) {
-      self.cpu.
+      self.cpu.cycle(in_memory, instruction, reset)
     }
 }
 

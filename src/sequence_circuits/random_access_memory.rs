@@ -1,4 +1,4 @@
-use crate::gates::{dmux4way, dmux8way, mux4way16, mux8way16};
+use crate::gates::{dmux, dmux4way, dmux8way, mux16, mux4way16, mux8way16};
 
 use super::{register::Register, word::Word};
 
@@ -218,6 +218,48 @@ impl RAM4K {
     }
 }
 
+pub struct RAM8K {
+    rams: [RAM4K; 2],
+}
+
+impl RAM8K {
+    pub fn new() -> Self {
+        Self {
+            rams: [RAM4K::new(), RAM4K::new()],
+        }
+    }
+
+    pub fn out(&self, address: [bool; 13]) -> Word {
+        let (lo, hi) = RAM8K::split_address(address);
+        mux16::calc(self.rams[0].out(lo), self.rams[1].out(lo), hi)
+    }
+
+    pub fn clock(&mut self, address: [bool; 13], input: Word, load: bool) {
+        let (lo, hi) = RAM8K::split_address(address);
+        let load = dmux::calc(load, hi);
+        self.rams[0].clock(lo, input, load[0]);
+        self.rams[1].clock(lo, input, load[1]);
+    }
+
+    fn split_address(address: [bool; 13]) -> ([bool; 12], bool) {
+        let lo = [
+            address[0],
+            address[1],
+            address[2],
+            address[3],
+            address[4],
+            address[5],
+            address[6],
+            address[7],
+            address[8],
+            address[9],
+            address[10],
+            address[11],
+        ];
+        let hi = address[12];
+        (lo, hi)
+    }
+}
 pub struct RAM16K {
     rams: [RAM4K; 4],
 }
