@@ -24,4 +24,8 @@ impl Counter {
             [load, reset],
         )
     }
+
+    pub fn out(&self) -> Word {
+      self.register.out()
+    }
 }

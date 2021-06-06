@@ -21,10 +21,20 @@ impl<S: Screen, K: Keyboard> Computer<S, K> {
 
     pub fn clock(&mut self, reset: bool) {
         let (cpu_output, write_to_memory, address, pc) = self.cpu.out();
+        // Memoryへの書き込み
         self.memory.clock(address, write_to_memory, cpu_output);
+
+        // ROMへの書き込み
+        let pc = pc.out();
+        let pc = [
+            pc[0], pc[1], pc[2], pc[4], pc[5], pc[6], pc[7], pc[8], pc[9], pc[10], pc[11], pc[12],
+            pc[13], pc[14], pc[15],
+        ];
+        self.rom.set_address(pc);
+
         let memory_data = self.memory.out(address);
-        // ROMにPCの値の書き込みが必要かも？
         let instruction = self.rom.out();
+        // CPUへの書き込み
         self.cpu.cycle(memory_data, instruction, reset);
     }
 
