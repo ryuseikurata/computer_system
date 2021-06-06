@@ -14,13 +14,10 @@ impl Counter {
         }
     }
     /// 参考(https://nihemak.hatenablog.com/entry/2019/04/28/150541#PC)
-    pub fn calc(&mut self, input: Word, inc: bool, load: bool, reset: bool) -> Word {
+    pub fn calc(&mut self, input: Word, is_increment: bool, load: bool, reset: bool) -> Word {
+        let register = self.register.out();
         mux4way16::calc(
-            mux16::calc(
-                self.register.out(),
-                incrementer16::calc(self.register.out()),
-                inc,
-            ),
+            mux16::calc(register, incrementer16::calc(register), is_increment),
             input,
             [false; 16],
             [false; 16],
