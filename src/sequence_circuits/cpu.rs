@@ -36,7 +36,7 @@ impl CPU {
             instruction[5],
             instruction[6],
             instruction[7],
-            in_memory[8],
+            instruction[8],
             instruction[9],
         ];
         // comp領域を格納する場所を決定
@@ -162,7 +162,7 @@ impl CPU {
         - そうでなければインクリメント
         - なぜincはtrueにしていいのかは謎
         */
-        self.pc.calc(a, true, is_pc_load, reset);
+        self.pc.calc(out_a, true, is_pc_load, reset);
     }
     /**
     出力 (i xx a cccccc ddd jjj) \
@@ -214,41 +214,40 @@ impl CPU {
 
 #[cfg(test)]
 mod tests {
-    use crate::sequence_circuits::word::Word;
+    use crate::{const_values, sequence_circuits::word::Word};
 
     use super::CPU;
 
     // 1 + 1を実装
-    // A命令に1を設定
+    // Memoryに1を設定
     // C命令で1をプラスするという演算を仕込む
     /// no jump 000
     // 数値参照のためにはシンボル実装しなければいけない
-    /// A命令@1 => 1を2進数で表記したものを設定 [false, false, false, .... true]
+    //
     //  C命令+1 => [true, true, true, a, true, true, true, true, true, true, d1, d2, d3, j1, j2, j3 ]
     // 1つ目はtrue、2,3はtrueにする必要がある c領域は、A+1(アドレスレジスタにあるものから+1)する
     //
     #[test]
     fn increment() {
-        let a_instruction = [
-            false, false, false, false, false, false, false, false, false, false, false, false,
-            false, false, false, true,
-        ];
-        let c_instruction = c_instruction();
-        let cpu = CPU::new();
-        cpu.cycle(in_memory, instruction, reset)
+        let in_memory = const_values::ONE;
+        let instruction = c_instruction();
+        let mut cpu = CPU::new();
+        cpu.cycle(in_memory, instruction, false);
+        let out = const_values::TWO;
+        assert_eq!(out, cpu.out_memory);
     }
 
     fn c_instruction() -> Word {
         // Aレジスタ、もしくはAレジスタとDレジスタによる処理はfalse
-        let a = false;
-        // Compニーモニック(A+1)
+        let a = true;
+        // Compニーモニック(M+1)
         let [c1, c2, c3, c4, c5, c6] = [true, true, false, true, true, true];
         // d1: Aレジスタに格納するか
         // d2: Dレジスタに格納するか
         // d3: Memoryに格納するか
         // Memoryに保存したいのでd3のみtrue
         let [d1, d2, d3] = [false, false, true];
-        let [j1, j2, j3] = [false, false, true];
+        let [j1, j2, j3] = [false, false, false];
         [
             true, true, true, a, c1, c2, c3, c4, c5, c6, d1, d2, d3, j1, j2, j3,
         ]

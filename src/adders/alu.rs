@@ -1,4 +1,8 @@
-use crate::{const_values, gates::{and16, mux16, not, not16, or, or8way}, sequence_circuits::word::Word};
+use crate::{
+    const_values,
+    gates::{and16, mux16, not, not16, or, or8way},
+    sequence_circuits::word::Word,
+};
 
 use super::adder16;
 /// x[16], y[16], 二つの16ビットデータ入力\
@@ -93,6 +97,21 @@ pub mod tests {
             calc(x, y, true, true, false, false, false, true),
             (not16::calc(y), false, true)
         )
+    }
+
+    #[test]
+    fn one_plus_one() {
+        let one = const_values::ONE;
+        let (out, _, _) = calc(one, one, false, false, false, false, true, false);
+
+        assert_eq!(out, const_values::TWO);
+    }
+
+    #[test]
+    fn y_increment() {
+      let one = const_values::ONE;
+      let (out, _, _) = calc(one, one, true, true, false, true, true, true);
+      assert_eq!(out, const_values::TWO);
     }
 
     #[test]

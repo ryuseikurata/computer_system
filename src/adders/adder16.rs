@@ -39,3 +39,15 @@ pub fn calc(a: Word, b: Word) -> Word {
         result15.sum,
     ]
 }
+
+#[cfg(test)]
+mod test {
+    use crate::{adders::adder16::calc, const_values};
+
+    #[test]
+    fn one_plus_one() {
+        let one = const_values::ONE;
+        let out = calc(one, one);
+        assert_eq!(out, const_values::TWO);
+    }
+}

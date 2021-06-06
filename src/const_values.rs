@@ -1,11 +1,13 @@
 use crate::sequence_circuits::word::Word;
 
-
-
 pub const ZERO: Word = [false; 16];
 
 pub const ONE: Word = [
     true, false, false, false, false, false, false, false, false, false, false, false, false,
+    false, false, false,
+];
+pub const TWO: Word = [
+    false, true, false, false, false, false, false, false, false, false, false, false, false,
     false, false, false,
 ];
 pub const FULL: Word = [true; 16];
@@ -36,6 +38,6 @@ pub const SAMPLE_5: Word = [
 ];
 
 pub const SAMPLE_6: Word = [
-    false, true, true, false, true, true, true, true, true, true, true, true, false, true,
-    false, false,
+    false, true, true, false, true, true, true, true, true, true, true, true, false, true, false,
+    false,
 ];
