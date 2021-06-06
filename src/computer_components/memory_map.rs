@@ -1,6 +1,6 @@
 use super::{keyboard::Keyboard, screen::Screen};
 use crate::{
-    gates::{dmux4way, or},
+    gates::{dmux4way, mux, mux16, or},
     sequence_circuits::{random_access_memory::RAM16K, word::Word},
 };
 
@@ -73,5 +73,41 @@ impl<S: Screen, K: Keyboard> Memory<S, K> {
             input,
             is_load_ram,
         );
+    }
+
+    pub fn out(&self, address: [bool; 15]) -> Word {
+        let lo = [
+            address[0],
+            address[1],
+            address[2],
+            address[3],
+            address[4],
+            address[5],
+            address[6],
+            address[7],
+            address[8],
+            address[9],
+            address[10],
+            address[11],
+            address[12],
+            address[13],
+        ];
+        let hi = address[14];
+        mux16::calc(
+            self.ram.out(lo),
+            mux16::calc(
+                self.screen.out([
+                    lo[0], lo[1], lo[2], lo[3], lo[4], lo[5], lo[6], lo[7], lo[8], lo[9], lo[10],
+                    lo[11], lo[12],
+                ]),
+                self.keyboard.out(),
+                lo[13],
+            ),
+            address[13],
+        )
+    }
+
+    pub fn screen(&self) -> &S {
+        &self.screen
     }
 }

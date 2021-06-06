@@ -176,4 +176,16 @@ impl CPU {
             self.pc,
         )
     }
+
+    pub fn pc(&self) -> &Counter {
+        &self.pc
+    }
+
+    pub fn d(&self) -> Word {
+      self.a_register.out()
+    }
+
+    pub fn a(&self) -> Word {
+      self.d_register.out()
+    }
 }

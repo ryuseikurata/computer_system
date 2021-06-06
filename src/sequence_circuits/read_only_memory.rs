@@ -1,5 +1,7 @@
 use std::fs::File;
 
+use crate::const_values;
+
 use super::{random_access_memory::RAM4K, word::Word};
 
 /// 機械語で書かれたプログラムの命令を一つずつ、アドレスの0番目から順に保持する構造体
@@ -24,5 +26,11 @@ impl ROM32K {
     }
     pub fn load(&mut self, file_name: &str) {
         let file = File::open(file_name.clone()).expect(&format!("Fail to Open {}", file_name));
+    }
+
+    pub fn out(&self) -> Word {
+        self.rams[0].out([
+            false, false, false, false, false, false, false, false, false, false, false, false,
+        ])
     }
 }
