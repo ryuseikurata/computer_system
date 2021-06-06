@@ -54,4 +54,12 @@ impl<S: Screen, K: Keyboard> Computer<S, K> {
     pub fn screen(&self) -> &S {
         self.memory.screen()
     }
+
+    pub fn set_rom(&mut self, rom: ROM32K) {
+        self.rom = rom
+    }
+
+    pub fn set_keyboard_state(&mut self) {
+        self.memory.set_key_board_state()
+    }
 }

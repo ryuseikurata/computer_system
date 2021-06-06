@@ -110,4 +110,8 @@ impl<S: Screen, K: Keyboard> Memory<S, K> {
     pub fn screen(&self) -> &S {
         &self.screen
     }
+
+    pub fn set_key_board_state(&mut self) {
+        self.keyboard.set_state()
+    }
 }
