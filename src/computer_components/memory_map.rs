@@ -1,6 +1,6 @@
 use super::{keyboard::Keyboard, screen::Screen};
 use crate::{
-    gates::{and, dmux4way, not, or},
+    gates::{dmux4way, or},
     sequence_circuits::{random_access_memory::RAM16K, word::Word},
 };
 
@@ -21,9 +21,9 @@ impl<S: Screen, K: Keyboard> Memory<S, K> {
         }
     }
 
-    pub fn clock(&mut self, address: &[bool; 15], load: bool, input: Word) {
+    pub fn clock(&mut self, address: [bool; 15], load: bool, input: Word) {
         // ポインタの移動を行わず(参照外し)、値だけ取得
-        self.address = *address;
+        self.address = address;
 
         // アドレス13,14で判断
         // address[14] = true かつ address[13] = trueはキーボード  => [false, false, false, input]
@@ -33,8 +33,25 @@ impl<S: Screen, K: Keyboard> Memory<S, K> {
             dmux4way::calc(load, [address[14], address[13]]);
         let is_load_ram = or::calc(is_load_ram_1, is_load_ram_2);
 
+        let write_address = [
+            address[0],
+            address[1],
+            address[2],
+            address[3],
+            address[4],
+            address[5],
+            address[6],
+            address[7],
+            address[8],
+            address[9],
+            address[10],
+            address[11],
+            address[12],
+        ];
         // screen書き込み
+        self.screen.clock(write_address, input, is_load_screen);
         // keyboard書き込み
+        self.keyboard.set_state();
         // ram書き込み
         self.ram.clock(
             [

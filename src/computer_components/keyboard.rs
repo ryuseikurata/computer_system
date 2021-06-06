@@ -4,7 +4,7 @@ pub trait Keyboard {
     type State;
     fn new() -> Self;
     fn out(&self) -> Word;
-    fn set_state(&mut self, state: Self::State);
+    fn set_state(&mut self);
 }
 
 pub struct DummyKeyboard {
@@ -23,5 +23,5 @@ impl Keyboard for DummyKeyboard {
         self.register.out()
     }
 
-    fn set_state(&mut self, state: Self::State) {}
+    fn set_state(&mut self) {}
 }
