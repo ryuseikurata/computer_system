@@ -1,6 +1,6 @@
 use crate::{
     adders::alu,
-    gates::{and, mux16, not, or},
+    gates::{and, mux, mux16, not, or},
 };
 
 use super::{counter_circuit::Counter, register::Register, word::Word};
@@ -27,58 +27,80 @@ impl CPU {
     }
 
     pub fn cycle(&mut self, in_memory: Word, instruction: Word, reset: bool) {
-        let is_c_command = instruction[15]; // A命令かC命令か
+        let is_c_command = instruction[0]; // A命令かC命令か
+                                           // C命令の動作設定
+        let a = instruction[3];
+        // Comp領域
+        let [c1, c2, c3, c4, c5, c6] = [
+            instruction[4],
+            instruction[5],
+            instruction[6],
+            instruction[7],
+            in_memory[8],
+            instruction[9],
+        ];
+        // comp領域を格納する場所を決定
+        // d1 = true => Aレジスタに格納
+        // d2 = true => Dレジスタに格納
+        // d3 = true => Memoryに格納
+        let [d1, d2, d3] = [instruction[10], instruction[11], instruction[12]];
 
         /*
         ALUの計算
         */
-        let use_m = and::calc(is_c_command, instruction[3]);
-        let zero_d = and::calc(is_c_command, instruction[4]);
-        let negate_d = and::calc(is_c_command, instruction[5]);
-        let zero_a = and::calc(is_c_command, instruction[6]);
-        let negate_a = and::calc(is_c_command, instruction[7]);
-        let f = and::calc(is_c_command, instruction[8]);
-        let negate_alu = and::calc(is_c_command, instruction[9]);
-        let d = self.d_register.out();
-        let a = mux16::calc(self.a_register.out(), in_memory, use_m);
+        // Memoryを使うかどうか
+        let is_use_memory = and::calc(is_c_command, a);
+        // 入力xをzeroにするか
+        let zx = and::calc(is_c_command, c1);
+        // 入力xを反転するか
+        let nx = and::calc(is_c_command, c2);
+        // 入力yをzeroにするか
+        let zy = and::calc(is_c_command, c3);
+        // 入力yを反転するか
+        let ny = and::calc(is_c_command, c4);
+        // trueは加算、falseはand演算
+        let f = and::calc(is_c_command, c5);
+        // 出力を反転するか
+        let no = and::calc(is_c_command, c6);
+        let x = self.d_register.out();
+        // Memoryを使用、もしくはAレジスタを使用
+        let y = mux16::calc(self.a_register.out(), in_memory, is_use_memory);
         let (alu_out_result, alu_out_is_zero, alu_out_is_negate) =
-            alu::calc(d, a, zero_d, negate_d, zero_a, negate_a, f, negate_alu);
+            alu::calc(x, y, zx, nx, zy, ny, f, no);
         self.out_memory = alu_out_result;
 
         /*
         Aレジスタへの書き込み
 
         - Aレジスタへの入力を決定
-        - A命令であればinstruction, C命令であればresultをAに記録
-        - A命令の場合もしくはC命令のdistが1の場合、Aレジスタに書き込む
         */
-        let is_load_a = or::calc(!is_c_command, instruction[10]);
-        self.a_register.clock(
-            mux16::calc(instruction, alu_out_result, is_c_command),
-            is_load_a,
-        );
-        let a = self.a_register.out();
+        // A命令の場合もしくはC命令のdistが1の場合、Aレジスタに書き込むかどうかを判断
+        let is_load_a = or::calc(!is_c_command, d1);
+        // A命令であればinstruction, C命令であればresultをAに記録
+        let to_a = mux16::calc(instruction, alu_out_result, is_c_command);
+        self.a_register.clock(to_a, is_load_a);
+        let out_a = self.a_register.out();
+        // a[0]はA命令か,C命令かの判断に使われるだけなので切り捨てることができる
         self.address_memory = [
-            a[1], a[2], a[3], a[4], a[5], a[6], a[7], a[8], a[9], a[10], a[11], a[12], a[13],
-            a[14], a[15],
+            out_a[1], out_a[2], out_a[3], out_a[4], out_a[5], out_a[6], out_a[7], out_a[8],
+            out_a[9], out_a[10], out_a[11], out_a[12], out_a[13], out_a[14], out_a[15],
         ];
 
         /*
         Dレジスタへの書き込み
         C命令かつdestのd2(Dレジスタに計算結果を格納する）がONであればDレジスタにロードする
         */
-        let is_load_d = and::calc(is_c_command, instruction[11]);
+        let is_load_d = and::calc(is_c_command, d2);
         self.d_register.clock(alu_out_result, is_load_d);
 
         /*
         WriteMemoryへの書き込み
         */
-        self.write_to_memory = and::calc(is_c_command, instruction[12]);
+        self.write_to_memory = and::calc(is_c_command, d3);
 
         /*
         GT(GreaterThan)判定
         */
-
         let is_positive = not::calc(alu_out_is_negate);
         let is_not_zero = not::calc(alu_out_is_zero);
         let is_gt = and::calc(is_positive, is_not_zero);
@@ -182,10 +204,53 @@ impl CPU {
     }
 
     pub fn d(&self) -> Word {
-      self.a_register.out()
+        self.a_register.out()
     }
 
     pub fn a(&self) -> Word {
-      self.d_register.out()
+        self.d_register.out()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::sequence_circuits::word::Word;
+
+    use super::CPU;
+
+    // 1 + 1を実装
+    // A命令に1を設定
+    // C命令で1をプラスするという演算を仕込む
+    /// no jump 000
+    // 数値参照のためにはシンボル実装しなければいけない
+    /// A命令@1 => 1を2進数で表記したものを設定 [false, false, false, .... true]
+    //  C命令+1 => [true, true, true, a, true, true, true, true, true, true, d1, d2, d3, j1, j2, j3 ]
+    // 1つ目はtrue、2,3はtrueにする必要がある c領域は、A+1(アドレスレジスタにあるものから+1)する
+    //
+    #[test]
+    fn increment() {
+        let a_instruction = [
+            false, false, false, false, false, false, false, false, false, false, false, false,
+            false, false, false, true,
+        ];
+        let c_instruction = c_instruction();
+        let cpu = CPU::new();
+        cpu.cycle(in_memory, instruction, reset)
+    }
+
+    fn c_instruction() -> Word {
+        // Aレジスタ、もしくはAレジスタとDレジスタによる処理はfalse
+        let a = false;
+        // Compニーモニック(A+1)
+        let [c1, c2, c3, c4, c5, c6] = [true, true, false, true, true, true];
+        // d1: Aレジスタに格納するか
+        // d2: Dレジスタに格納するか
+        // d3: Memoryに格納するか
+        // Memoryに保存したいのでd3のみtrue
+        let [d1, d2, d3] = [false, false, true];
+        let [j1, j2, j3] = [false, false, true];
+        [
+            true, true, true, a, c1, c2, c3, c4, c5, c6, d1, d2, d3, j1, j2, j3,
+        ]
     }
 }
